@@ -5,12 +5,13 @@ Pseudocode and short descriptions for each sorting algorithms:
 Pseudocode:
 
 ```
-function bubbleSort(arr)
+function bubbleSort(arr):
     n = length(arr)
-    for i from 0 to n-1
-        for j from 0 to n-1-i
-            if arr[j] > arr[j+1]
+    for i from 0 to n-1:
+        for j from 0 to n-1-i:
+            if arr[j] > arr[j+1]:
                 swap(arr[j], arr[j+1])
+    return arr
 ```
 
 Description:
@@ -21,12 +22,28 @@ Bubble sort is a simple comparison-based sorting algorithm. It repeatedly compar
 Pseudocode:
 
 ```
-function heapSort(arr)
+function heapSort(arr):
     buildMaxHeap(arr)
+    for i from length(arr) down to 2:
+        swap(arr[1], arr[i])
+        heapify(arr, 1, i - 1)
+
+function buildMaxHeap(arr):
     n = length(arr)
-    for i from n-1 to 0
-        swap(arr[0], arr[i])
-        maxHeapify(arr, 0, i)
+    for i from n/2 down to 1:
+        heapify(arr, i, n)
+
+function heapify(arr, i, n):
+    largest = i
+    left = 2 * i
+    right = 2 * i + 1
+    if left <= n and arr[left] > arr[largest]:
+        largest = left
+    if right <= n and arr[right] > arr[largest]:
+        largest = right
+    if largest != i:
+        swap(arr[i], arr[largest])
+        heapify(arr, largest, n)
 ```
 
 Description:
@@ -37,15 +54,16 @@ Heap sort is a comparison-based sorting algorithm that uses a binary heap data s
 Pseudocode:
 
 ```
-function insertionSort(arr)
+function insertionSort(arr):
     n = length(arr)
-    for i from 1 to n-1
+    for i from 1 to n-1:
         key = arr[i]
         j = i - 1
-        while j >= 0 and arr[j] > key
-            arr[j+1] = arr[j]
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
             j = j - 1
-        arr[j+1] = key
+        arr[j + 1] = key
+    return arr
 ```
 
 Description:
@@ -56,13 +74,31 @@ Insertion sort is a simple sorting algorithm that builds the final sorted array 
 Pseudocode:
 
 ```
-function mergeSort(arr)
-    if length(arr) <= 1
+function mergeSort(arr):
+    if length(arr) <= 1:
         return arr
+
     mid = length(arr) / 2
-    left = mergeSort(arr[0 to mid-1])
-    right = mergeSort(arr[mid to end])
+    left = arr[0 to mid-1]
+    right = arr[mid to end]
+
+    left = mergeSort(left)
+    right = mergeSort(right)
+
     return merge(left, right)
+
+function merge(left, right):
+    result = []
+    while left is not empty and right is not empty:
+        if left[0] <= right[0]:
+            append left[0] to result
+            remove first element from left
+        else:
+            append right[0] to result
+            remove first element from right
+
+    append remaining elements of left and right to result
+    return result
 ```
 
 Description:
@@ -73,13 +109,21 @@ Merge sort is a divide-and-conquer sorting algorithm. It divides the array into 
 Pseudocode:
 
 ```
-function quickSort(arr)
-    if length(arr) <= 1
-        return arr
-    pivot = choosePivot(arr)
-    left = elements in arr less than pivot
-    right = elements in arr greater than pivot
-    return concatenate(quickSort(left), pivot, quickSort(right))
+function quickSort(arr, low, high):
+    if low < high:
+        pivotIndex = partition(arr, low, high)
+        quickSort(arr, low, pivotIndex - 1)
+        quickSort(arr, pivotIndex + 1, high)
+
+function partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    for j from low to high - 1:
+        if arr[j] <= pivot:
+            i = i + 1
+            swap arr[i] and arr[j]
+    swap arr[i + 1] and arr[high]
+    return i + 1
 ```
 
 Description:
@@ -90,14 +134,16 @@ Quick sort is a divide-and-conquer sorting algorithm that chooses a pivot elemen
 Pseudocode:
 
 ```
-function selectionSort(arr)
+function selectionSort(arr):
     n = length(arr)
-    for i from 0 to n-1
+    for i from 0 to n-1:
         minIndex = i
-        for j from i+1 to n-1
-            if arr[j] < arr[minIndex]
+        for j from i+1 to n-1:
+            if arr[j] < arr[minIndex]:
                 minIndex = j
-        swap(arr[i], arr[minIndex])
+        if minIndex != i:
+            swap arr[i] and arr[minIndex]
+    return arr
 ```
 
 Description:

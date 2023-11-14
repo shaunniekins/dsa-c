@@ -1,67 +1,59 @@
 #include <stdio.h>
 
-// Merge two subarrays of arr[]
-// First subarray is arr[l..m]
-// Second subarray is arr[m+1..r]
-void merge(int arr[], int l, int m, int r) {
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 = r - m;
+// Function to merge two subarrays
+void merge(int arr[], int start, int mid, int end) {
+    int leftSize = mid - start + 1;
+    int rightSize = end - mid;
 
-    // Create temporary arrays
-    int L[n1], R[n2];
+    // Create temp arrays
+    int left[leftSize], right[rightSize];
 
-    // Copy data to temp arrays L[] and R[]
-    for (i = 0; i < n1; i++) {
-        L[i] = arr[l + i];
-    }
-    for (j = 0; j < n2; j++) {
-        R[j] = arr[m + 1 + j];
-    }
+    // Copy data to temp arrays
+    for (int i = 0; i < leftSize; i++)
+        left[i] = arr[start + i];
+    for (int j = 0; j < rightSize; j++)
+        right[j] = arr[mid + 1 + j];
 
-    // Merge the temp arrays back into arr[l..r]
-    i = 0; // Initial index of first subarray
-    j = 0; // Initial index of second subarray
-    k = l; // Initial index of merged subarray
-
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
+    // Merge the temp arrays back into arr[]
+    int i = 0, j = 0, k = start;
+    while (i < leftSize && j < rightSize) {
+        if (left[i] <= right[j]) {
+            arr[k] = left[i];
             i++;
         } else {
-            arr[k] = R[j];
+            arr[k] = right[j];
             j++;
         }
         k++;
     }
 
-    // Copy the remaining elements of L[], if there are any
-    while (i < n1) {
-        arr[k] = L[i];
+    // Copy the remaining elements of left[], if there are any
+    while (i < leftSize) {
+        arr[k] = left[i];
         i++;
         k++;
     }
 
-    // Copy the remaining elements of R[], if there are any
-    while (j < n2) {
-        arr[k] = R[j];
+    // Copy the remaining elements of right[], if there are any
+    while (j < rightSize) {
+        arr[k] = right[j];
         j++;
         k++;
     }
 }
 
-// l is for left index and r is right index of the sub-array of arr to be sorted
-void mergeSort(int arr[], int l, int r) {
-    if (l < r) {
-        // Same as (l+r)/2, but avoids overflow for large l and r
-        int m = l + (r - l) / 2;
+// Function to implement merge sort
+void mergeSort(int arr[], int start, int end) {
+    if (start < end) {
+        // Find middle point
+        int mid = start + (end - start) / 2;
 
         // Sort first and second halves
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
+        mergeSort(arr, start, mid);
+        mergeSort(arr, mid + 1, end);
 
         // Merge the sorted halves
-        merge(arr, l, m, r);
+        merge(arr, start, mid, end);
     }
 }
 
